@@ -1,7 +1,7 @@
 var multer = require("multer");
 function subirArchivo() {
   var storage = multer.diskStorage({
-    destination: "",
+    destination: "./web/images",
     filename: function (req, file, cb) {
       var archivo = file.originalname;
       cb(null, archivo);

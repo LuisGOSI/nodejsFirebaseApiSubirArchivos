@@ -20,11 +20,10 @@ ruta.get("/nuevousuario", async (req, res) => {
   res.render("usuarios/nuevo");
 });
 
-ruta.post("/nuevousuario", subirArchivo, async (req, res) => {
-  console.log(req.body);
-  // var error = await nuevoUsuario(req.body);
-  // res.redirect("/");
-  res.end
+ruta.post("/nuevousuario", subirArchivo(), async (req, res) => {
+  req.body.foto=req.file.originalname;
+  var error = await nuevoUsuario(req.body);
+  res.redirect("/");
 });
 
 ruta.get("/editar/:id", async (req, res) => {

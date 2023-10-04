@@ -6,6 +6,7 @@ class Usuario {
     this.nombre = data.nombre;
     this.usuario = data.usuario;
     this.password = data.password;
+    this.foto = data.foto;
   }
   set id(id) {
     if (id != null) id.length > 0 ? (this._id = id) : (this.bandera = 1);
@@ -22,6 +23,9 @@ class Usuario {
     password.length > 0 ? (this._password = password) : (this.bandera = 1);
     // console.log(this._password);
   }
+  set foto(foto) {
+    foto.length > 0 ? (this._foto = foto) : (this.bandera = 1);
+  }
   get id() {
     return this._id;
   }
@@ -34,6 +38,9 @@ class Usuario {
   get password() {
     return this._password;
   }
+  get foto() {
+    return this._foto;
+  }
   get obtenerDatos() {
     if (this._id != null) {
       return {
@@ -41,12 +48,14 @@ class Usuario {
         nombre: this.nombre,
         usuario: this.usuario,
         password: this.password,
+        foto: this.foto,
       };
     } else {
       return {
         nombre: this.nombre,
         usuario: this.usuario,
         password: this.password,
+        foto: this.foto,
       };
     }
   }
