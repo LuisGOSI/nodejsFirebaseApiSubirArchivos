@@ -64,11 +64,21 @@ rutapr.post("/api/productos/editarPr", subirArchivo(), async (req, res) => {
 });
 
 rutapr.get("/api/productos/borrarPr/:id", async (req, res) => {
-  var error = await borrarProducto(req.params.id);
-  if (error == 0) {
-    res.status(200).json("Producto borrado");
-  } else {
-    res.status(400).json("Error al borrar el producto");
+  try {
+    var producto=await buscarPorIDPr(req.params.id)
+    if(producto){
+      var foto= producto.foto;
+      fs.unlinkSync(`web/images/${foto}`);
+      var error = await borrarProducto(req.params.id);
+    }
+    if (error == 0) {
+      res.status(200).json("Producto borrado");
+    } else {
+      res.status(400).json("Error al borrar el producto");
+    }
+  } catch (error) {
+    console.error("Error al borrar pr:", error);  
+    res.status(500).send("Error interno del servidor");
   }
 });
 
