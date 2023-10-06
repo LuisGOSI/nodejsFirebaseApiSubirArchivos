@@ -33,10 +33,28 @@ ruta.get("/editar/:id", async (req, res) => {
   res.render("usuarios/modificar", { user });
 });
 
+// ruta.post("/editar", subirArchivo(), async (req, res) => {
+//   req.body.foto = req.file.originalname;
+//   var error = await modificarUsuario(req.body);
+//   res.redirect("/");
+// });
+
 ruta.post("/editar", subirArchivo(), async (req, res) => {
-  req.body.foto = req.file.originalname;
-  var error = await modificarUsuario(req.body);
-  res.redirect("/");
+  try {
+      const usuarioAct = await buscarPorID(req.body.id);
+      if (req.file) {
+          req.body.foto = req.file.originalname;
+          if (usuarioAct.foto) {
+              const rutaFotoAnterior = `web/images/${usuarioAct.foto}`;
+              fs.unlinkSync(rutaFotoAnterior);
+          }
+      }
+      await modificarUsuario(req.body);
+      res.redirect("/");
+  } catch (error) {
+      console.error("Error al editar pr:", error);
+      res.status(500).send("Error interno del servidor");
+  }
 });
 
 ruta.get("/borrar/:id", async (req, res) => {
