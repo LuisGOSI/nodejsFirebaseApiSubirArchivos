@@ -1,4 +1,5 @@
 var ruta = require("express").Router();
+var fs=require("fs");
 var {
   mostrarUsuarios,
   nuevoUsuario,
@@ -32,13 +33,19 @@ ruta.get("/editar/:id", async (req, res) => {
   res.render("usuarios/modificar", { user });
 });
 
-ruta.post("/editar", async (req, res) => {
+ruta.post("/editar", subirArchivo(), async (req, res) => {
+  req.body.foto = req.file.originalname;
   var error = await modificarUsuario(req.body);
   res.redirect("/");
 });
 
 ruta.get("/borrar/:id", async (req, res) => {
+  var usuario=await buscarPorID(req.params.id)
+  if(usuario){
+  var foto= usuario.foto;
+  fs.unlinkSync(`web/images/${foto}`);
   await borrarUsuario(req.params.id);
+  }
   res.redirect("/");
 });
 

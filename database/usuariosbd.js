@@ -49,7 +49,7 @@ async function nuevoUsuario(datos) {
 async function modificarUsuario(datos) {
   var error = 1;
   var respuestaBuscar = await buscarPorID(datos.id);
-  if (respuestaBuscar != undefined) {
+  if (respuestaBuscar != "") {
     var user = new Usuario(datos.id, datos);
     if (user.bandera == 0) {
       try {

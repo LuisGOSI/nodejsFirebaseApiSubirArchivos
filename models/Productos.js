@@ -5,6 +5,7 @@ class Productos {
     this.nombre = data.nombre;
     this.precio = data.precio;
     this.stock = data.stock;
+    this.foto = data.foto;
   }
   set id(id) {
     if (id != null) id.length > 0 ? (this._id = id) : (this.bandera = 1);
@@ -18,6 +19,9 @@ class Productos {
   set stock(stock) {
     stock >= 0 ? (this._stock = stock) : (this.bandera = 1);
   }
+  set foto(foto) {
+    foto.length >= 0 ? (this._foto = foto) : (this.bandera = 1);
+  }
   get id() {
     return this._id;
   }
@@ -30,6 +34,9 @@ class Productos {
   get stock() {
     return this._stock;
   }
+  get foto() {
+    return this._foto;
+  }
   get obtenerDatos() {
     if (this._id != null) {
       return {
@@ -37,12 +44,14 @@ class Productos {
         nombre: this.nombre,
         precio: this.precio,
         stock: this.stock,
+        foto: this.foto,
       };
     } else {
       return {
         nombre: this.nombre,
         precio: this.precio,
         stock: this.stock,
+        foto: this.foto,
       };
     }
   }

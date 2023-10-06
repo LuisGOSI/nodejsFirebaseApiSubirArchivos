@@ -2,7 +2,7 @@
 <%- include("../templates/menu") %>
 
 <div class="container mt-5">
-  <form action="/editar" method="post">
+  <form action="/editar" method="post" enctype="multipart/form-data">
     <div class="card">
         <div class="card-header">
             <h1>Modificar usuario</h1>
@@ -12,7 +12,8 @@
             <input class="form-control mb-3" type="text" value="<%= user.nombre %>" name="nombre" id="nombre" placeholder="Nombre" autofocus>
             <input class="form-control mb-3" type="text" value="<%= user.usuario %>" name="usuario" id="usuario" placeholder="Usuario" >
             <input class="form-control mb-3" type="password" value="<%= user.password %>" name="password" id="password" placeholder="Password" >
-        </div>
+            <input class="form-control mb-3" type="file" value="<%= user.foto %>" name="foto" id="foto" placeholder="Foto" >
+          </div>
         <div class="card-footer">
             <button class="form-control btn btn-primary" type="submit">Modificar usuario</button>
         </div>

@@ -1,5 +1,5 @@
 var ruta = require("express").Router();
-const { id } = require("../database/conexion");
+var subirArchivo=require("../middlewares/subirArchivos");
 var {
   mostrarUsuarios,
   nuevoUsuario,
@@ -7,6 +7,8 @@ var {
   modificarUsuario,
   borrarUsuario,
 } = require("../database/usuariosbd");
+var fs=require("fs");
+
 
 ruta.get("/api/mostrarUsuarios", async (req, res) => {
   var usuarios = await mostrarUsuarios();
@@ -17,8 +19,9 @@ ruta.get("/api/mostrarUsuarios", async (req, res) => {
   }
 });
 
-ruta.post("/api/nuevousuario", async (req, res) => {
-  console.log(req.body);
+ruta.post("/api/nuevousuario", subirArchivo(), async (req, res) => {
+  req.body.foto=req.file.originalname;
+  // console.log(req.body);
   var error = await nuevoUsuario(req.body);
   if ((error == 0)) {
     res.status(200).json("Usuario registrado");
@@ -37,7 +40,8 @@ ruta.get("/api/buscarUsuarioPorId/:id", async (req, res) => {
   // res.render("usuarios/modificar", { user });
 });
 
-ruta.post("/api/editarUsuario", async (req, res) => {
+ruta.post("/api/editarUsuario", subirArchivo(),async (req, res) => {
+  req.body.foto = req.file.originalname;
   var error = await modificarUsuario(req.body);
   if (error == 0) {
     res.status(200).json("Usuario modificado");
