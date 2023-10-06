@@ -41,12 +41,24 @@ ruta.get("/api/buscarUsuarioPorId/:id", async (req, res) => {
 });
 
 ruta.post("/api/editarUsuario", subirArchivo(),async (req, res) => {
-  req.body.foto = req.file.originalname;
-  var error = await modificarUsuario(req.body);
-  if (error == 0) {
-    res.status(200).json("Usuario modificado");
-  } else {
-    res.status(400).json("Error al  modificar el usuario");
+  try {
+    const usuarioAct = await buscarPorID(req.body.id);
+    if (req.file) {
+        req.body.foto = req.file.originalname;
+        if (usuarioAct.foto) {
+            const rutaFotoAnterior = `web/images/${usuarioAct.foto}`;
+            fs.unlinkSync(rutaFotoAnterior);
+        }
+    }
+    var error = await modificarUsuario(req.body);
+    if (error == 0) {
+      res.status(200).json("Usuario modificado");
+    } else {
+      res.status(400).json("Error al  modificar el usuario");
+    }
+  } catch (error) {
+      console.error("Error al editar pr:", error);
+      res.status(500).send("Error interno del servidor");
   }
 });
 

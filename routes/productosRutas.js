@@ -30,10 +30,26 @@ rutapr.get("/productos/editarPr/:id", async (req, res) => {
 });
 
 rutapr.post("/productos/editarPr",subirArchivo(), async (req, res) => {
-  req.body.foto=req.file.originalname;
-  var error = await modificarProducto(req.body);
-  res.redirect("/productos/productos/mostrarproductos");
+  try {
+    const productoAct = await buscarPorIDPr(req.body.id);
+    if (req.file) {
+        req.body.foto = req.file.originalname;
+        if (productoAct.foto) {
+            const rutaFotoAnterior = `web/images/${productoAct.foto}`;
+            fs.unlinkSync(rutaFotoAnterior);
+        }
+    }
+    var error = await modificarProducto(req.body);
+    res.redirect("/productos/productos/mostrarproductos");
+  } catch (error) {
+    console.error("Error al editar pr:", error);  
+    res.status(500).send("Error interno del servidor");
+  }
+  
 });
+
+
+
 
 rutapr.get("/productos/borrarPr/:id", async (req, res) => {
   var producto=await buscarPorIDPr(req.params.id)
